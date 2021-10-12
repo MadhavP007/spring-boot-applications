@@ -1,4 +1,4 @@
-package com.luv4code.springboot;
+package com.luv4code.springboot.app.ws;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
