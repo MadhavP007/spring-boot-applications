@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luv4code.springboot.app.ws.exceptions.UserServiceException;
 import com.luv4code.springboot.app.ws.service.UserService;
 import com.luv4code.springboot.app.ws.shared.dto.UserDto;
 import com.luv4code.springboot.app.ws.ui.model.request.UserDetailsRequestModel;
-import com.luv4code.springboot.app.ws.ui.model.response.ErrorMessages;
 import com.luv4code.springboot.app.ws.ui.model.response.UserRest;
 
 @RestController
@@ -40,9 +38,6 @@ public class UserController {
 			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
-		if (userDetails.getFirstName().isEmpty())
-			throw new NullPointerException("the object is null");
-
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
 
@@ -51,9 +46,17 @@ public class UserController {
 		return returnValue;
 	}
 
-	@PutMapping
-	public String updateUser() {
-		return "update user was called";
+	@PutMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_XML_VALUE,
+					MediaType.APPLICATION_JSON_VALUE })
+	public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
+		UserRest returnValue = new UserRest();
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userDetails, userDto);
+
+		UserDto updatedUser = userService.updateUser(id,userDto);
+		BeanUtils.copyProperties(updatedUser, returnValue);
+		return returnValue;
 	}
 
 	@DeleteMapping
