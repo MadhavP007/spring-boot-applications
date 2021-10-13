@@ -6,4 +6,7 @@ spring:
     password: root
       jpa:    hibernate:      ddl-auto: update    properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL55Dialect    
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        
+        
+tokenSecret: jf9i4jgu83nfl0    
