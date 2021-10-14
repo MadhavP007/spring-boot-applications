@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.luv4code.springboot.app.ws.service.UserService;
 import com.luv4code.springboot.app.ws.shared.dto.UserDto;
 import com.luv4code.springboot.app.ws.ui.model.request.UserDetailsRequestModel;
+import com.luv4code.springboot.app.ws.ui.model.response.OperationStatusModel;
+import com.luv4code.springboot.app.ws.ui.model.response.RequestOperationName;
+import com.luv4code.springboot.app.ws.ui.model.response.RequestOperationStatus;
 import com.luv4code.springboot.app.ws.ui.model.response.UserRest;
 
 @RestController
@@ -54,13 +57,19 @@ public class UserController {
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
 
-		UserDto updatedUser = userService.updateUser(id,userDto);
+		UserDto updatedUser = userService.updateUser(id, userDto);
 		BeanUtils.copyProperties(updatedUser, returnValue);
 		return returnValue;
 	}
 
-	@DeleteMapping
-	public String deleteUser() {
-		return "delete user was called";
+	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	public OperationStatusModel deleteUser(@PathVariable String id) {
+		OperationStatusModel returnValue = new OperationStatusModel();
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+		userService.deleteUser(id);
+
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		return returnValue;
 	}
 }
