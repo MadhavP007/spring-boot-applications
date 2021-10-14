@@ -7,6 +7,7 @@ spring:
       jpa:    hibernate:      ddl-auto: update    properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL55Dialect
-        
+
+server:  servlet:    context-path: /mobile-app-ws        
         
 tokenSecret: jf9i4jgu83nfl0    
