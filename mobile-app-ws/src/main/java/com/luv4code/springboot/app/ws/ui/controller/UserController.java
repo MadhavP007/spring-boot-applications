@@ -3,6 +3,7 @@ package com.luv4code.springboot.app.ws.ui.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -45,8 +46,8 @@ public class UserController {
 			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
-		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userDetails, userDto);
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
 		UserDto createUser = userService.create(userDto);
 		BeanUtils.copyProperties(createUser, returnValue);
