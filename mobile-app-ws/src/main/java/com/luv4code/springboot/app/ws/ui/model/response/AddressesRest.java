@@ -1,16 +1,13 @@
-package com.luv4code.springboot.app.ws.shared.dto;
+package com.luv4code.springboot.app.ws.ui.model.response;
 
 import lombok.Data;
 
 @Data
-public class AddressDTO {
-	private long id;
+public class AddressesRest {
 	private String addressId;
 	private String city;
 	private String country;
 	private String streetName;
 	private String postalCode;
 	private String type;
-	private UserDto userDetails;
-
 }

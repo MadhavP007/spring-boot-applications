@@ -3,6 +3,7 @@ package com.luv4code.springboot.app.ws.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import com.luv4code.springboot.app.ws.io.entity.UserEntity;
 import com.luv4code.springboot.app.ws.repository.UserRepository;
 import com.luv4code.springboot.app.ws.service.UserService;
 import com.luv4code.springboot.app.ws.shared.Utils;
+import com.luv4code.springboot.app.ws.shared.dto.AddressDTO;
 import com.luv4code.springboot.app.ws.shared.dto.UserDto;
 import com.luv4code.springboot.app.ws.ui.model.response.ErrorMessages;
 
@@ -40,8 +42,15 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByEmail(user.getEmail()) != null)
 			throw new RuntimeException("Record Already Exists");
 
-		UserEntity userEntity = new UserEntity();
-		BeanUtils.copyProperties(user, userEntity);
+		for (int i = 0; i < user.getAddresses().size(); i++) {
+			AddressDTO address = user.getAddresses().get(i);
+			address.setUserDetails(user);
+			address.setAddressId(utils.generateAddressId(30));
+			user.getAddresses().set(i, address);
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
 		String userId = utils.generateUserId(30);
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -49,8 +58,7 @@ public class UserServiceImpl implements UserService {
 
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 
-		UserDto returnValue = new UserDto();
-		BeanUtils.copyProperties(storedUserDetails, returnValue);
+		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
 		return returnValue;
 	}
