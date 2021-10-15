@@ -1,5 +1,7 @@
 package com.luv4code.springboot.app.ws.ui.model.request;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +15,6 @@ public class UserDetailsRequestModel {
 	private String lastName;
 	private String email;
 	private String password;
+	private List<AddressModelRequest> addresses;
 
 }
